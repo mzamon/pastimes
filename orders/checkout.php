@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Insert order
         $ins = mysqli_prepare($conn,
-            "INSERT INTO orders (buyer_id, total, delivery_address, status, payment_method)
+            "INSERT INTO tblOrders (buyer_id, total, delivery_address, status, payment_method)
              VALUES (?, ?, ?, 'Pending', ?)");
         mysqli_stmt_bind_param($ins, 'idss', $_SESSION['user_id'], $total, $delivery_address, $payment_method);
         mysqli_stmt_execute($ins);
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             mysqli_stmt_execute($iins);
             mysqli_stmt_close($iins);
 
-            $upd = mysqli_prepare($conn, "UPDATE products SET status = 'sold' WHERE id = ?");
+            $upd = mysqli_prepare($conn, "UPDATE tblProducts SET status = 'sold' WHERE id = ?");
             mysqli_stmt_bind_param($upd, 'i', $pid);
             mysqli_stmt_execute($upd);
             mysqli_stmt_close($upd);

@@ -4,9 +4,32 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-define('BASE_URL', '/pastimes/');
+// Dynamically determine BASE_URL so the site works under both
+// Apache/XAMPP (e.g. /pastimes/) and the PHP built-in server (project root).
+// Only use /pastimes/ if SCRIPT_NAME explicitly contains /pastimes/
+// (meaning the server is configured to serve via Apache/subfolder).
+$scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '/');
+$baseUrl = '/';
+
+// If the script is under /pastimes/ in the URL, we're hosted in Apache subfolder
+if (strpos($scriptName, '/pastimes/') === 0) {
+    $baseUrl = '/pastimes/';
+}
+define('BASE_URL', $baseUrl);
 define('UPLOAD_DIR', __DIR__ . '/../assets/images/uploads/');
 define('IMAGE_BASE', BASE_URL . 'assets/images/');
+
+// Text scanning + validation helpers (sanitization middleware)
+require_once __DIR__ . '/TextScanner.php';
+
+// NOTE: Global output scanning was causing hyphenated classnames and
+// filenames to be rewritten (breaking CSS and image paths). Disable
+// the automatic output filter to preserve markup integrity.
+// If you need text-only sanitization, call `scanWebsiteText()` on
+// specific user-submitted fields instead of buffering all output.
+// if (!headers_sent()) {
+//     ob_start('scanWebsiteText');
+// }
 
 // ------------------------------------------------------------------
 // SANITIZE — trim input only. DO NOT htmlspecialchars before DB.

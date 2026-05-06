@@ -7,9 +7,9 @@ requireLogin(); // Any logged-in user can view their own orders
 
 $stmt = mysqli_prepare($conn,
     "SELECT o.*, GROUP_CONCAT(p.title SEPARATOR ', ') AS items_summary
-     FROM orders o
+    FROM tblOrders o
      LEFT JOIN order_items oi ON o.id = oi.order_id
-     LEFT JOIN products p ON oi.product_id = p.id
+    LEFT JOIN tblProducts p ON oi.product_id = p.id
      WHERE o.buyer_id = ?
      GROUP BY o.id
      ORDER BY o.created_at DESC");

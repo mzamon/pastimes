@@ -1,7 +1,5 @@
-# Pastimes — Second-Hand Marketplace
-## WEDE6021 Part 2 | Distinction Submission
-
----
+## Mzamo Ndlovu
+Pastimes Marketplace / ClothingStore Demo
 
 ## Requirements
 
@@ -23,23 +21,30 @@ C:\xampp\htdocs\pastimes\
 
 ### Step 2 — Import database
 1. Start Apache and MySQL in the XAMPP Control Panel
-2. Open **phpMyAdmin** at `http://localhost/phpmyadmin` 
-3. Click **Import** → Select `pastimes/database.sql` → Click **Go**
+2. Open **phpMyAdmin** at `http://localhost/phpmyadmin`
+3. Click **Import** → Select `pastimes/myClothingStore.sql` → Click **Go**
+
+If you want the POE-named database, run the loader below after importing.
 
 ### Step 2b — Seed full demo data
 Run the loader script once after the schema is imported:
 ```
 http://localhost/pastimes/loadClothingStore.php
 ```
-This resets the database and inserts the larger demo set required for the POE.
+This creates or refreshes the `ClothingStore` database and inserts the larger demo set required for the POE.
+
+To rebuild the POE-style `tblUser` table from the text file, run:
+```
+http://localhost/pastimes/createTable.php
+```
 
 ### Step 3 — Verify database connection
-Open `/pastimes/config/db.php` and confirm:
+Open `/pastimes/config/DBConn.php` and confirm:
 ```php
-$host   = 'localhost';
-$user   = 'root';
-$pass   = '';          // Default XAMPP MySQL has no password
-$dbname = 'pastimes';
+define('DB_HOST', '127.0.0.1');
+define('DB_USER', 'root');
+define('DB_PASS', '');          // Default XAMPP MySQL has no password
+define('DB_NAME', 'ClothingStore');
 ```
 
 ### Step 4 — Verify image directories exist
@@ -59,6 +64,8 @@ pastimes/assets/images/uploads/          ← create this if missing
 ```
 http://localhost/pastimes/
 ```
+
+Use the user login for buyers/sellers and the Admin button for the separate admin login flow.
 
 ---
 
@@ -98,7 +105,9 @@ http://localhost/pastimes/
 - Touch-friendly 48px+ tap targets
 
 ### Security
-- `password_hash(PASSWORD_DEFAULT)` + `password_verify()` — bcrypt
+- `password_hash(PASSWORD_DEFAULT)` + `password_verify()` — modern hash support
+- `md5()` compatibility for POE sample data loaded from `userData.txt`
+- Login accepts a username + email + password combination and shows the logged-in user table on success
 - `sanitize()` — trims/strips for input; `h()` — `htmlspecialchars` on all output
 - No raw SQL concatenation anywhere
 - Ownership verification before edit/delete operations
@@ -109,13 +118,15 @@ http://localhost/pastimes/
 - Seller requests are submitted through `/auth/request_seller.php`
 - Admin verification and user management are handled in `/admin/verify_users.php` and `/admin/users.php`
 - `loadClothingStore.php` recreates and seeds the database for the full demo
+- `createTable.php` rebuilds `tblUser` from `userData.txt`
 - Documentation folders are reserved under `/documentation`
+- `POE_Documentation.md` contains the Word-style project documentation in Markdown format
 
 ---
 
 ## Troubleshooting
 
-**Blank page / errors on screen** — Enable error reporting in `config/db.php`:
+**Blank page / errors on screen** — Enable error reporting in `config/DBConn.php`:
 ```php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);

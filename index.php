@@ -6,9 +6,9 @@ require_once __DIR__ . '/includes/functions.php';
 // Featured products (latest 8 active)
 $stmt = mysqli_prepare($conn,
     "SELECT p.*, c.name AS category_name, u.name AS seller_name
-     FROM products p
+    FROM tblProducts p
      JOIN categories c ON p.category_id = c.id
-     JOIN users u ON p.seller_id = u.id
+    JOIN tblUser u ON p.seller_id = u.id
      WHERE p.status = 'active'
      ORDER BY p.created_at DESC
      LIMIT 8");
@@ -25,8 +25,8 @@ require_once __DIR__ . '/includes/header.php';
 
 <!-- Hero -->
 <section class="hero">
-    <h1>Buy &amp; Sell Pre-Owned Hobbies</h1>
-    <p>Vintage clothing, electronics, sports gear, collectibles — and more.</p>
+    <h1>Buy &amp; Sell Pre-Loved clothes &amp; co.</h1>
+    <p>Pre-loved clothes — and the rest.</p>
     <div class="hero-ctas">
         <a href="<?php echo BASE_URL; ?>products/index.php" class="btn btn-primary btn-lg">Browse Items</a>
         <?php if (!isLoggedIn()): ?>

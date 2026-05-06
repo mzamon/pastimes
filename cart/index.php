@@ -59,7 +59,7 @@ require_once __DIR__ . '/../includes/header.php';
                             </td>
                             <td>R <?php echo number_format($line_total, 2); ?></td>
                             <td>
-                                <a href="remove.php?id=<?php echo $pid; ?>" class="btn btn-danger btn-sm"
+                                <a href="<?php echo BASE_URL; ?>cart/remove.php?id=<?php echo $pid; ?>" class="btn btn-danger btn-sm"
                                    data-confirm="Remove this item from your cart?">Remove</a>
                             </td>
                         </tr>

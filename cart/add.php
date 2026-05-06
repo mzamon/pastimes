@@ -8,7 +8,7 @@ $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id <= 0) redirect(BASE_URL . 'products/index.php');
 
 // Fetch active product
-$stmt = mysqli_prepare($conn, "SELECT id, title, price, seller_id, image FROM products WHERE id = ? AND status = 'active'");
+$stmt = mysqli_prepare($conn, "SELECT id, title, price, seller_id, image FROM tblProducts WHERE id = ? AND status = 'active'");
 mysqli_stmt_bind_param($stmt, 'i', $id);
 mysqli_stmt_execute($stmt);
 $p = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));

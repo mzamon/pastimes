@@ -9,7 +9,7 @@ $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id <= 0) redirect(BASE_URL . 'products/index.php');
 
 // Verify ownership
-$chk = mysqli_prepare($conn, "SELECT seller_id, image FROM products WHERE id = ?");
+$chk = mysqli_prepare($conn, "SELECT seller_id, image FROM tblProducts WHERE id = ?");
 mysqli_stmt_bind_param($chk, 'i', $id);
 mysqli_stmt_execute($chk);
 $chk_result = mysqli_stmt_get_result($chk);
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $stmt = mysqli_prepare($conn,
-            "UPDATE products SET category_id=?, title=?, description=?, price=?, `condition`=?, image=?, updated_at=NOW()
+            "UPDATE tblProducts SET category_id=?, title=?, description=?, price=?, `condition`=?, image=?, updated_at=NOW()
              WHERE id=?");
         mysqli_stmt_bind_param($stmt, 'issdssi', $category_id, $title, $description, $price, $condition, $image_path, $id);
         if (mysqli_stmt_execute($stmt)) {
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } else {
     // Fetch current values
-    $stmt = mysqli_prepare($conn, "SELECT * FROM products WHERE id = ?");
+    $stmt = mysqli_prepare($conn, "SELECT * FROM tblProducts WHERE id = ?");
     mysqli_stmt_bind_param($stmt, 'i', $id);
     mysqli_stmt_execute($stmt);
     $post = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
@@ -134,7 +134,7 @@ require_once __DIR__ . '/../includes/header.php';
         </div>
         <div style="display:flex; gap:0.75rem;">
             <button type="submit" class="btn btn-primary" style="flex:1;">Save Changes</button>
-            <a href="view.php?id=<?php echo $id; ?>" class="btn btn-secondary">Cancel</a>
+            <a href="<?php echo BASE_URL; ?>products/view.php?id=<?php echo $id; ?>" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>

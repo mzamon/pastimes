@@ -254,7 +254,13 @@ textarea.form-control { resize: vertical; min-height: 100px; }
     margin-bottom: 1.5rem;
     color: var(--text);
 }
-
+/* ── Utility classes ──────────────────────────────────────── */
+.mt-1    { margin-top: 0.5rem; }
+.mt-2    { margin-top: 1rem; }
+.mb-1    { margin-bottom: 0.5rem; }
+.mb-2    { margin-bottom: 1rem; }
+.text-muted { color: var(--text-muted); }
+.text-faint { color: var(--text-faint); }
 /* ── Cards ─────────────────────────────────────────────────── */
 .card {
     background: var(--surface);
@@ -553,6 +559,19 @@ textarea.form-control { resize: vertical; min-height: 100px; }
 @media (min-width: 1024px) {
     .product-grid { grid-template-columns: repeat(4, 1fr); }
     .hero h1      { font-size: 2.8rem; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   TABLET — screen and max-width 768px
+═══════════════════════════════════════════════════════ */
+@media screen and (max-width: 768px) {
+    .product-grid   { grid-template-columns: 1fr 1fr; }
+    .stats-grid     { grid-template-columns: 1fr 1fr; }
+    .cart-layout    { grid-template-columns: 1fr; }
+    .hero h1        { font-size: 1.8rem; }
+    .hero p         { font-size: 1rem; }
+    .filter-bar     { align-items: stretch; }
+    .filter-bar .form-control { width: 100%; }
 }
 
 /* ═══════════════════════════════════════════════════════

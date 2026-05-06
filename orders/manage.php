@@ -15,16 +15,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
     if ($order_id > 0 && in_array($new_status, $allowed)) {
         // Verify this seller has a product in the order
         $chk = mysqli_prepare($conn,
-            "SELECT o.id FROM orders o
+            "SELECT o.id FROM tblOrders o
              JOIN order_items oi ON o.id = oi.order_id
-             JOIN products p ON oi.product_id = p.id
+             JOIN tblProducts p ON oi.product_id = p.id
              WHERE o.id = ? AND p.seller_id = ?
              LIMIT 1");
         mysqli_stmt_bind_param($chk, 'ii', $order_id, $_SESSION['user_id']);
         mysqli_stmt_execute($chk);
         mysqli_stmt_store_result($chk);
         if (mysqli_stmt_num_rows($chk) > 0) {
-            $upd = mysqli_prepare($conn, "UPDATE orders SET status=?, tracking_number=? WHERE id=?");
+            $upd = mysqli_prepare($conn, "UPDATE tblOrders SET status=?, tracking_number=? WHERE id=?");
             mysqli_stmt_bind_param($upd, 'ssi', $new_status, $tracking, $order_id);
             mysqli_stmt_execute($upd);
             mysqli_stmt_close($upd);
@@ -38,10 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
 $stmt = mysqli_prepare($conn,
     "SELECT DISTINCT o.*, u.name AS buyer_name,
             GROUP_CONCAT(p.title SEPARATOR ', ') AS product_titles
-     FROM orders o
+    FROM tblOrders o
      JOIN order_items oi ON o.id = oi.order_id
-     JOIN products p ON oi.product_id = p.id
-     JOIN users u ON o.buyer_id = u.id
+    JOIN tblProducts p ON oi.product_id = p.id
+    JOIN tblUser u ON o.buyer_id = u.id
      WHERE p.seller_id = ?
      GROUP BY o.id
      ORDER BY o.created_at DESC");

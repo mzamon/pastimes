@@ -9,7 +9,7 @@ $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id <= 0) redirect(BASE_URL . 'products/index.php');
 
 // Verify ownership
-$chk = mysqli_prepare($conn, "SELECT seller_id FROM products WHERE id = ?");
+$chk = mysqli_prepare($conn, "SELECT seller_id FROM tblProducts WHERE id = ?");
 mysqli_stmt_bind_param($chk, 'i', $id);
 mysqli_stmt_execute($chk);
 mysqli_stmt_store_result($chk);
@@ -22,7 +22,7 @@ if ($seller_id != $_SESSION['user_id']) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_delete'])) {
-    $stmt = mysqli_prepare($conn, "DELETE FROM products WHERE id = ?");
+    $stmt = mysqli_prepare($conn, "DELETE FROM tblProducts WHERE id = ?");
     mysqli_stmt_bind_param($stmt, 'i', $id);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
@@ -41,7 +41,7 @@ require_once __DIR__ . '/../includes/header.php';
     <form method="POST" action="">
         <div style="display:flex; justify-content:center; gap:0.75rem;">
             <button type="submit" name="confirm_delete" class="btn btn-danger">Yes, Delete</button>
-            <a href="index.php" class="btn btn-secondary">Cancel</a>
+            <a href="<?php echo BASE_URL; ?>products/index.php" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>

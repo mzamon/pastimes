@@ -14,18 +14,18 @@ function getStat($conn, $sql) {
     return $row[0] ?? 0;
 }
 
-$total_users    = getStat($conn, "SELECT COUNT(*) FROM users");
-$total_products = getStat($conn, "SELECT COUNT(*) FROM products");
-$total_orders   = getStat($conn, "SELECT COUNT(*) FROM orders");
-$total_messages = getStat($conn, "SELECT COUNT(*) FROM messages");
-$pending_users  = getStat($conn, "SELECT COUNT(*) FROM users WHERE is_verified = 0");
-$pending_sellers = getStat($conn, "SELECT COUNT(*) FROM users WHERE role = 'seller' AND seller_request = 'pending'");
-$total_revenue_row = mysqli_query($conn, "SELECT COALESCE(SUM(total),0) FROM orders WHERE status='Delivered'");
+$total_users    = getStat($conn, "SELECT COUNT(*) FROM tblUser");
+$total_products = getStat($conn, "SELECT COUNT(*) FROM tblProducts");
+$total_orders   = getStat($conn, "SELECT COUNT(*) FROM tblOrders");
+$total_messages = getStat($conn, "SELECT COUNT(*) FROM tblMessages");
+$pending_users  = getStat($conn, "SELECT COUNT(*) FROM tblUser WHERE is_verified = 0");
+$pending_sellers = getStat($conn, "SELECT COUNT(*) FROM tblSellerRequests WHERE status = 'pending'");
+$total_revenue_row = mysqli_query($conn, "SELECT COALESCE(SUM(total),0) FROM tblOrders WHERE status='Delivered'");
 $total_revenue  = mysqli_fetch_row($total_revenue_row)[0] ?? 0;
 
 // Recent users (limit 10)
 $ustmt = mysqli_prepare($conn,
-    "SELECT id, name, email, role, created_at FROM users ORDER BY created_at DESC LIMIT 10");
+    "SELECT id, name, email, role, created_at FROM tblUser ORDER BY created_at DESC LIMIT 10");
 mysqli_stmt_execute($ustmt);
 $recent_users = mysqli_fetch_all(mysqli_stmt_get_result($ustmt), MYSQLI_ASSOC);
 mysqli_stmt_close($ustmt);
@@ -33,7 +33,7 @@ mysqli_stmt_close($ustmt);
 // Recent orders (limit 10)
 $ostmt = mysqli_prepare($conn,
     "SELECT o.id, o.total, o.status, o.created_at, u.name AS buyer_name
-     FROM orders o JOIN users u ON o.buyer_id = u.id
+    FROM tblOrders o JOIN tblUser u ON o.buyer_id = u.id
      ORDER BY o.created_at DESC LIMIT 10");
 mysqli_stmt_execute($ostmt);
 $recent_orders = mysqli_fetch_all(mysqli_stmt_get_result($ostmt), MYSQLI_ASSOC);

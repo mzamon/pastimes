@@ -7,27 +7,36 @@ if (isLoggedIn()) redirect(BASE_URL . 'index.php');
 
 $errors = [];
 $post = [];
+$loggedInUser = null;
 
 if (isset($_GET['pending'])) {
     $errors[] = 'Your account is pending administrator approval.';
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = sanitize($_POST['username'] ?? '');
     $email    = sanitize($_POST['email']    ?? '');
     $password = $_POST['password'] ?? '';
+    $post['username'] = $username;
     $post['email'] = $email;
 
-    if (empty($email) || empty($password)) {
-        $errors[] = 'Please enter your email and password.';
+    if (empty($username) || empty($email) || empty($password)) {
+        $errors[] = 'Please enter your username, email and password.';
     } else {
-        $stmt = mysqli_prepare($conn, "SELECT id, name, email, password_hash, role, is_verified, seller_request FROM users WHERE email = ? LIMIT 1");
-        mysqli_stmt_bind_param($stmt, 's', $email);
+        $stmt = mysqli_prepare($conn, "SELECT id, name, email, password_hash, role, is_verified, seller_request FROM tblUser WHERE name = ? AND email = ? LIMIT 1");
+        mysqli_stmt_bind_param($stmt, 'ss', $username, $email);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $user   = mysqli_fetch_assoc($result);
         mysqli_stmt_close($stmt);
 
-        if ($user && password_verify($password, $user['password_hash'])) {
+        $storedHash = $user['password_hash'] ?? '';
+        $passwordOk = $user && (
+            password_verify($password, $storedHash) ||
+            hash_equals(md5($password), (string)$storedHash)
+        );
+
+        if ($passwordOk) {
             if ((int)$user['is_verified'] !== 1) {
                 $errors[] = 'Your account is pending administrator approval.';
             } else {
@@ -40,12 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['seller_request'] = $user['seller_request'] ?? 'none';
 
                 // Update last login timestamp
-                $upd = mysqli_prepare($conn, "UPDATE users SET last_login = NOW() WHERE id = ?");
+                $upd = mysqli_prepare($conn, "UPDATE tblUser SET last_login = NOW() WHERE id = ?");
                 mysqli_stmt_bind_param($upd, 'i', $user['id']);
                 mysqli_stmt_execute($upd);
                 mysqli_stmt_close($upd);
 
-                redirect(BASE_URL . 'index.php');
+                $loggedInUser = $user;
             }
         } else {
             $errors[] = 'Invalid email or password.';
@@ -60,8 +69,37 @@ require_once __DIR__ . '/../includes/header.php';
 
 <div class="form-wrap">
     <?php foreach ($errors as $e) echo displayError($e); ?>
+    <?php if ($loggedInUser): ?>
+        <div class="alert alert-success">User <?php echo h($loggedInUser['name']); ?> is logged in</div>
+        <div class="table-wrap mb-2">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Verified</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><?php echo h($loggedInUser['id']); ?></td>
+                        <td><?php echo h($loggedInUser['name']); ?></td>
+                        <td><?php echo h($loggedInUser['email']); ?></td>
+                        <td><?php echo h($loggedInUser['role']); ?></td>
+                        <td><?php echo verificationBadge($loggedInUser['is_verified']); ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
 
     <form method="POST" action="">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" class="form-control" required autofocus value="<?php echo h($post['username'] ?? ''); ?>">
+        </div>
         <div class="form-group">
             <label for="email">Email Address</label>
             <input type="email" id="email" name="email" class="form-control" required autofocus value="<?php echo h($post['email'] ?? ''); ?>">

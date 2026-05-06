@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $stmt = mysqli_prepare($conn,
-            "INSERT INTO products (seller_id, category_id, title, description, price, `condition`, image)
+            "INSERT INTO tblProducts (seller_id, category_id, title, description, price, `condition`, image)
              VALUES (?, ?, ?, ?, ?, ?, ?)");
         mysqli_stmt_bind_param($stmt, 'iissdss',
             $_SESSION['user_id'],

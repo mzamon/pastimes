@@ -12,7 +12,7 @@ $current_uid   = $_SESSION['user_id'];
 if ($product_id <= 0 || $other_user_id <= 0) redirect(BASE_URL . 'messages/inbox.php');
 
 // Fetch product title
-$pst = mysqli_prepare($conn, "SELECT title FROM products WHERE id = ?");
+$pst = mysqli_prepare($conn, "SELECT title FROM tblProducts WHERE id = ?");
 mysqli_stmt_bind_param($pst, 'i', $product_id);
 mysqli_stmt_execute($pst);
 $product = mysqli_fetch_assoc(mysqli_stmt_get_result($pst));
@@ -20,7 +20,7 @@ mysqli_stmt_close($pst);
 if (!$product) redirect(BASE_URL . 'messages/inbox.php');
 
 // Fetch other user name
-$ust = mysqli_prepare($conn, "SELECT name FROM users WHERE id = ?");
+$ust = mysqli_prepare($conn, "SELECT name FROM tblUser WHERE id = ?");
 mysqli_stmt_bind_param($ust, 'i', $other_user_id);
 mysqli_stmt_execute($ust);
 $other_user = mysqli_fetch_assoc(mysqli_stmt_get_result($ust));
@@ -30,7 +30,7 @@ if (!$other_user) redirect(BASE_URL . 'messages/inbox.php');
 // Fetch thread
 $mst = mysqli_prepare($conn,
     "SELECT m.*, u.name AS sender_name
-     FROM messages m JOIN users u ON m.sender_id = u.id
+    FROM tblMessages m JOIN tblUser u ON m.sender_id = u.id
      WHERE m.product_id = ?
        AND ((m.sender_id = ? AND m.receiver_id = ?)
          OR (m.sender_id = ? AND m.receiver_id = ?))
@@ -42,7 +42,7 @@ mysqli_stmt_close($mst);
 
 // Mark received messages as read
 $read = mysqli_prepare($conn,
-    "UPDATE messages SET is_read = 1 WHERE receiver_id = ? AND sender_id = ? AND product_id = ?");
+    "UPDATE tblMessages SET is_read = 1 WHERE receiver_id = ? AND sender_id = ? AND product_id = ?");
 mysqli_stmt_bind_param($read, 'iii', $current_uid, $other_user_id, $product_id);
 mysqli_stmt_execute($read);
 mysqli_stmt_close($read);

@@ -9,9 +9,9 @@ if ($id <= 0) redirect(BASE_URL . 'products/index.php');
 // Fetch product with seller info
 $stmt = mysqli_prepare($conn,
     "SELECT p.*, c.name AS category_name, u.name AS seller_name, u.email AS seller_email
-     FROM products p
+    FROM tblProducts p
      JOIN categories c ON p.category_id = c.id
-     JOIN users u ON p.seller_id = u.id
+    JOIN tblUser u ON p.seller_id = u.id
      WHERE p.id = ?");
 mysqli_stmt_bind_param($stmt, 'i', $id);
 mysqli_stmt_execute($stmt);
@@ -28,8 +28,8 @@ $isOwner = isLoggedIn() && $_SESSION['user_id'] == $product['seller_id'];
 // Fetch reviews
 $rst = mysqli_prepare($conn,
     "SELECT r.*, u.name AS reviewer_name
-     FROM reviews r
-     JOIN users u ON r.reviewer_id = u.id
+    FROM tblReviews r
+    JOIN tblUser u ON r.reviewer_id = u.id
      WHERE r.product_id = ?
      ORDER BY r.created_at DESC");
 mysqli_stmt_bind_param($rst, 'i', $id);
@@ -55,7 +55,7 @@ require_once __DIR__ . '/../includes/header.php';
             <?php if ($product['status'] === 'sold'): ?>
                 <span class="btn btn-secondary" style="cursor:default;">Sold</span>
             <?php elseif ($isOwner): ?>
-                <a href="edit.php?id=<?php echo $product['id']; ?>" class="btn btn-secondary">Edit Listing</a>
+                <a href="<?php echo BASE_URL; ?>products/edit.php?id=<?php echo $product['id']; ?>" class="btn btn-secondary">Edit Listing</a>
             <?php else: ?>
                 <a href="<?php echo BASE_URL; ?>cart/add.php?id=<?php echo $product['id']; ?>" class="btn btn-primary btn-lg">Add to Cart</a>
                 <a href="<?php echo BASE_URL; ?>messages/chat.php?product_id=<?php echo $product['id']; ?>&user_id=<?php echo $product['seller_id']; ?>" class="btn btn-secondary">Message Seller</a>

@@ -12,9 +12,9 @@ $categories = mysqli_fetch_all($cat_result, MYSQLI_ASSOC);
 
 // Build dynamic query with prepared statement
 $sql    = "SELECT p.*, c.name AS category_name, u.name AS seller_name
-           FROM products p
+           FROM tblProducts p
            JOIN categories c ON p.category_id = c.id
-           JOIN users u ON p.seller_id = u.id
+           JOIN tblUser u ON p.seller_id = u.id
            WHERE p.status = 'active'";
 $params = [];
 $types  = '';
@@ -60,18 +60,18 @@ require_once __DIR__ . '/../includes/header.php';
                value="<?php echo h($search); ?>" style="flex:1; min-width:180px;">
         <button type="submit" class="btn btn-primary">Search</button>
         <?php if ($category_id > 0 || $search !== ''): ?>
-            <a href="index.php" class="btn btn-secondary">Clear</a>
+            <a href="<?php echo BASE_URL; ?>products/index.php" class="btn btn-secondary">Clear</a>
         <?php endif; ?>
     </form>
 </div>
 
 <?php if (empty($products)): ?>
-    <div class="alert alert-error">No products found. <a href="index.php">Clear filters</a></div>
+    <div class="alert alert-error">No products found. <a href="<?php echo BASE_URL; ?>products/index.php">Clear filters</a></div>
 <?php else: ?>
     <div class="product-grid">
         <?php foreach ($products as $p): ?>
             <div class="card">
-                <a href="view.php?id=<?php echo $p['id']; ?>">
+                <a href="<?php echo BASE_URL; ?>products/view.php?id=<?php echo $p['id']; ?>">
                     <img src="<?php echo getProductImage($p['image']); ?>"
                          alt="<?php echo h($p['title']); ?>" class="card-img">
                 </a>
@@ -80,7 +80,7 @@ require_once __DIR__ . '/../includes/header.php';
                     <div class="card-title"><?php echo h($p['title']); ?></div>
                     <div class="card-price">R <?php echo number_format($p['price'], 2); ?></div>
                     <p class="card-meta">by <?php echo h($p['seller_name']); ?></p>
-                    <a href="view.php?id=<?php echo $p['id']; ?>" class="btn btn-primary btn-full">View Details</a>
+                    <a href="<?php echo BASE_URL; ?>products/view.php?id=<?php echo $p['id']; ?>" class="btn btn-primary btn-full">View Details</a>
                 </div>
             </div>
         <?php endforeach; ?>

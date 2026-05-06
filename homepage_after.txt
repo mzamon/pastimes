@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Pastimes</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body>
+<header class="site-header">
+    <div class="container header-inner">
+        <a href="/index.php" class="logo">PASTIMES</a>
+        <button class="mobile-menu-toggle" aria-label="Toggle navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+        <nav class="main-nav" id="mainNav">
+            <ul>
+                <li><a href="/index.php">Home</a></li>
+                <li><a href="/products/index.php">Browse</a></li>
+
+                                    <li><a href="/auth/login.php">Login</a></li>
+                    <li><a href="/auth/register.php" class="btn btn-primary-sm">Register</a></li>
+                            </ul>
+        </nav>
+    </div>
+</header>
+<main class="container main-content">
+<!-- Hero -->
+<section class="hero">
+    <h1>Buy &amp; Sell Pre-Loved clothes &amp; co.</h1>
+    <p>Pre-loved clothes — and the rest.</p>
+    <div class="hero-ctas">
+        <a href="/products/index.php" class="btn btn-primary btn-lg">Browse Items</a>
+                    <a href="/auth/register.php" class="btn btn-secondary btn-lg">Get Started</a>
+            </div>
+</section>
+
+<!-- Categories -->
+<div class="category-chips">
+            <a href="/products/index.php?category=4" class="category-chip">
+            Books        </a>
+            <a href="/products/index.php?category=6" class="category-chip">
+            Collectibles        </a>
+            <a href="/products/index.php?category=3" class="category-chip">
+            Electronics        </a>
+            <a href="/products/index.php?category=5" class="category-chip">
+            Sports Gear        </a>
+            <a href="/products/index.php?category=2" class="category-chip">
+            Streetwear        </a>
+            <a href="/products/index.php?category=1" class="category-chip">
+            Vintage Clothing        </a>
+    </div>
+
+<!-- Featured listings -->
+<h2 class="section-title">Featured Listings</h2>
+
+    <div class="product-grid">
+                    <div class="card">
+                <a href="/products/view.php?id=16">
+                    <img src="/assets/images/sports-gear/running-shorts-1.jpg"
+                         alt="Demo Product 4" class="card-img">
+                </a>
+                <div class="card-body">
+                    <p class="card-meta">Books · Fair</p>
+                    <div class="card-title">Demo Product 4</div>
+                    <div class="card-price">R 110.00</div>
+                    <a href="/products/view.php?id=16"
+                       class="btn btn-primary btn-full">View Details</a>
+                </div>
+            </div>
+                    <div class="card">
+                <a href="/products/view.php?id=22">
+                    <img src="/assets/images/vintage-clothing/denim-jacket-2.jpg"
+                         alt="Demo Product 10" class="card-img">
+                </a>
+                <div class="card-body">
+                    <p class="card-meta">Books · Poor</p>
+                    <div class="card-title">Demo Product 10</div>
+                    <div class="card-price">R 200.00</div>
+                    <a href="/products/view.php?id=22"
+                       class="btn btn-primary btn-full">View Details</a>
+                </div>
+            </div>
+                    <div class="card">
+                <a href="/products/view.php?id=28">
+                    <img src="/assets/images/sports-gear/yoga-mat-1.jpg"
+                         alt="Demo Product 16" class="card-img">
+                </a>
+                <div class="card-body">
+                    <p class="card-meta">Books · New</p>
+                    <div class="card-title">Demo Product 16</div>
+                    <div class="card-price">R 290.00</div>
+                    <a href="/products/view.php?id=28"
+                       class="btn btn-primary btn-full">View Details</a>
+                </div>
+            </div>
+                    <div class="card">
+                <a href="/products/view.php?id=34">
+                    <img src="/assets/images/vintage-clothing/leather-jacket-1.jpg"
+                         alt="Demo Product 22" class="card-img">
+                </a>
+                <div class="card-body">
+                    <p class="card-meta">Books · Like New</p>
+                    <div class="card-title">Demo Product 22</div>
+                    <div class="card-price">R 380.00</div>
+                    <a href="/products/view.php?id=34"
+                       class="btn btn-primary btn-full">View Details</a>
+                </div>
+            </div>
+                    <div class="card">
+                <a href="/products/view.php?id=40">
+                    <img src="/assets/images/streetwear/hoodie-black-1.jpg"
+                         alt="Demo Product 28" class="card-img">
+                </a>
+                <div class="card-body">
+                    <p class="card-meta">Books · Good</p>
+                    <div class="card-title">Demo Product 28</div>
+                    <div class="card-price">R 470.00</div>
+                    <a href="/products/view.php?id=40"
+                       class="btn btn-primary btn-full">View Details</a>
+                </div>
+            </div>
+                    <div class="card">
+                <a href="/products/view.php?id=6">
+                    <img src="/assets/images/books/comic-marvel-1.jpg"
+                         alt="Marvel Comic Collection" class="card-img">
+                </a>
+                <div class="card-body">
+                    <p class="card-meta">Collectibles · Good</p>
+                    <div class="card-title">Marvel Comic Collection</div>
+                    <div class="card-price">R 600.00</div>
+                    <a href="/products/view.php?id=6"
+                       class="btn btn-primary btn-full">View Details</a>
+                </div>
+            </div>
+                    <div class="card">
+                <a href="/products/view.php?id=8">
+                    <img src="/assets/images/collectibles/vinyl-record-1.jpg"
+                         alt="Vinyl Record Collection" class="card-img">
+                </a>
+                <div class="card-body">
+                    <p class="card-meta">Collectibles · Good</p>
+                    <div class="card-title">Vinyl Record Collection</div>
+                    <div class="card-price">R 500.00</div>
+                    <a href="/products/view.php?id=8"
+                       class="btn btn-primary btn-full">View Details</a>
+                </div>
+            </div>
+                    <div class="card">
+                <a href="/products/view.php?id=18">
+                    <img src="/assets/images/streetwear/hoodie-black-1.jpg"
+                         alt="Demo Product 6" class="card-img">
+                </a>
+                <div class="card-body">
+                    <p class="card-meta">Collectibles · New</p>
+                    <div class="card-title">Demo Product 6</div>
+                    <div class="card-price">R 140.00</div>
+                    <a href="/products/view.php?id=18"
+                       class="btn btn-primary btn-full">View Details</a>
+                </div>
+            </div>
+            </div>
+
+</main>
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <p class="footer-logo">PASTIMES</p>
+        <p class="footer-text">Second-hand hobby &amp; leisure marketplace &copy; 2026</p>
+    </div>
+</footer>
+<script src="/assets/js/main.js"></script>
+</body>
+</html>

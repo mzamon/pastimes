@@ -36,6 +36,8 @@ require_once __DIR__ . '/functions.php';
                         <li><a href="<?php echo BASE_URL; ?>admin/dashboard.php">Admin</a></li>
                         <li><a href="<?php echo BASE_URL; ?>admin/verify_users.php">Verify Users</a></li>
                         <li><a href="<?php echo BASE_URL; ?>admin/users.php">Users</a></li>
+                    <?php else: ?>
+                        <li><a href="<?php echo BASE_URL; ?>auth/admin_login.php">Admin</a></li>
                     <?php endif; ?>
 
                     <li><a href="<?php echo BASE_URL; ?>orders/track.php">My Orders</a></li>

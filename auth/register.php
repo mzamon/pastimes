@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Duplicate email check
     if (empty($errors)) {
-        $chk = mysqli_prepare($conn, "SELECT id FROM users WHERE email = ?");
+        $chk = mysqli_prepare($conn, "SELECT id FROM tblUser WHERE email = ?");
         mysqli_stmt_bind_param($chk, 's', $post['email']);
         mysqli_stmt_execute($chk);
         mysqli_stmt_store_result($chk);
@@ -44,9 +44,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $seller_request = $post['role'] === 'seller' ? 'pending' : 'none';
         $is_verified = 0;
         $seller_note = $post['role'] === 'seller' ? $post['seller_reason'] : null;
-        $ins  = mysqli_prepare($conn, "INSERT INTO users (name, email, password_hash, role, is_verified, seller_request, seller_request_note) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $ins  = mysqli_prepare($conn, "INSERT INTO tblUser (name, email, password_hash, role, is_verified, seller_request, seller_request_note) VALUES (?, ?, ?, ?, ?, ?, ?)");
         mysqli_stmt_bind_param($ins, 'ssssiss', $post['name'], $post['email'], $hash, $post['role'], $is_verified, $seller_request, $seller_note);
         if (mysqli_stmt_execute($ins)) {
+            $newUserId = mysqli_insert_id($conn);
+            if ($post['role'] === 'seller') {
+                $req = mysqli_prepare($conn, "INSERT INTO tblSellerRequests (user_id, motivation, status) VALUES (?, ?, 'pending')");
+                mysqli_stmt_bind_param($req, 'is', $newUserId, $seller_note);
+                mysqli_stmt_execute($req);
+                mysqli_stmt_close($req);
+            }
             $success = 'Account created! Your profile is pending administrator approval.';
             $post    = [];
         } else {

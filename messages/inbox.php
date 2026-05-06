@@ -10,10 +10,10 @@ $uid = $_SESSION['user_id'];
 $stmt = mysqli_prepare($conn,
     "SELECT m.*, p.title AS product_title,
             us.name AS sender_name, ur.name AS receiver_name
-     FROM messages m
-     JOIN products p ON m.product_id = p.id
-     JOIN users us ON m.sender_id = us.id
-     JOIN users ur ON m.receiver_id = ur.id
+    FROM tblMessages m
+    JOIN tblProducts p ON m.product_id = p.id
+    JOIN tblUser us ON m.sender_id = us.id
+    JOIN tblUser ur ON m.receiver_id = ur.id
      WHERE m.sender_id = ? OR m.receiver_id = ?
      ORDER BY m.sent_at DESC");
 mysqli_stmt_bind_param($stmt, 'ii', $uid, $uid);
@@ -52,7 +52,7 @@ require_once __DIR__ . '/../includes/header.php';
                 <p class="conv-preview"><?php echo h(mb_strimwidth($c['message'], 0, 90, '…')); ?></p>
                 <small class="text-muted"><?php echo date('d M Y H:i', strtotime($c['sent_at'])); ?></small>
             </div>
-            <a href="chat.php?product_id=<?php echo $c['product_id']; ?>&user_id=<?php echo $c['other_user_id']; ?>"
+            <a href="<?php echo BASE_URL; ?>messages/chat.php?product_id=<?php echo $c['product_id']; ?>&user_id=<?php echo $c['other_user_id']; ?>"
                class="btn btn-primary btn-sm">Open Chat</a>
         </div>
     <?php endforeach; ?>

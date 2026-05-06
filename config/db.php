@@ -1,12 +1,7 @@
 <?php
-$host   = 'localhost';
-$user   = 'root';
-$pass   = '';
-$dbname = 'pastimes';
+require_once __DIR__ . '/DBConn.php';
 
-$conn = mysqli_connect($host, $user, $pass, $dbname);
-
-if (!$conn) {
+if (!isset($conn) || !$conn) {
     die('Database connection failed: ' . mysqli_connect_error());
 }
 

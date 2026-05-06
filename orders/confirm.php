@@ -8,7 +8,7 @@ requireLogin();
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if ($id <= 0) redirect(BASE_URL . 'index.php');
 
-$stmt = mysqli_prepare($conn, "SELECT * FROM orders WHERE id = ? AND buyer_id = ?");
+$stmt = mysqli_prepare($conn, "SELECT * FROM tblOrders WHERE id = ? AND buyer_id = ?");
 mysqli_stmt_bind_param($stmt, 'ii', $id, $_SESSION['user_id']);
 mysqli_stmt_execute($stmt);
 $order = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
