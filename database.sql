@@ -18,6 +18,9 @@ CREATE TABLE users (
     email         VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     role          ENUM('buyer','seller','admin') NOT NULL DEFAULT 'buyer',
+    is_verified   TINYINT(1)   NOT NULL DEFAULT 0,
+    seller_request ENUM('none','pending','approved','rejected') NOT NULL DEFAULT 'none',
+    seller_request_note TEXT    NULL,
     created_at    DATETIME     DEFAULT CURRENT_TIMESTAMP,
     last_login    DATETIME     NULL,
     INDEX idx_email (email),
@@ -141,11 +144,11 @@ CREATE TABLE reviews (
 -- Hash = password_hash('password', PASSWORD_DEFAULT)
 -- ============================================================
 
-INSERT INTO users (name, email, password_hash, role) VALUES
-('Admin User',  'admin@pastimes.co.za', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin'),
-('John Buyer',  'john@example.com',     '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'buyer'),
-('Sarah Seller','sarah@example.com',    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'seller'),
-('Mike Seller', 'mike@example.com',     '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'seller');
+INSERT INTO users (name, email, password_hash, role, is_verified, seller_request, seller_request_note) VALUES
+('Admin User',  'admin@pastimes.co.za', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 1, 'approved', 'System administrator'),
+('John Buyer',  'john@example.com',     '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'buyer', 1, 'none', NULL),
+('Sarah Seller','sarah@example.com',    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'seller', 1, 'approved', 'Vintage clothing and jackets'),
+('Mike Seller', 'mike@example.com',     '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'seller', 1, 'approved', 'Streetwear and hobby gear');
 
 INSERT INTO categories (name) VALUES
 ('Vintage Clothing'),

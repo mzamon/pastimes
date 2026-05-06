@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $post['role']  = sanitize($_POST['role']  ?? 'buyer');
     $password  = $_POST['password']         ?? '';
     $password2 = $_POST['confirm_password'] ?? '';
+    $post['seller_reason'] = sanitize($_POST['seller_reason'] ?? '');
 
     // Validation
     if (empty($post['name']))                         $errors[] = 'Full name is required.';
@@ -23,6 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (strlen($password) < 6)                        $errors[] = 'Password must be at least 6 characters.';
     if ($password !== $password2)                     $errors[] = 'Passwords do not match.';
     if (!in_array($post['role'], ['buyer','seller']))  $errors[] = 'Please select a valid role.';
+    if ($post['role'] === 'seller' && empty($post['seller_reason'])) {
+        $errors[] = 'Please tell us what you want to sell.';
+    }
 
     // Duplicate email check
     if (empty($errors)) {
@@ -37,10 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Insert
     if (empty($errors)) {
         $hash = password_hash($password, PASSWORD_DEFAULT);
-        $ins  = mysqli_prepare($conn, "INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)");
-        mysqli_stmt_bind_param($ins, 'ssss', $post['name'], $post['email'], $hash, $post['role']);
+        $seller_request = $post['role'] === 'seller' ? 'pending' : 'none';
+        $is_verified = 0;
+        $seller_note = $post['role'] === 'seller' ? $post['seller_reason'] : null;
+        $ins  = mysqli_prepare($conn, "INSERT INTO users (name, email, password_hash, role, is_verified, seller_request, seller_request_note) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        mysqli_stmt_bind_param($ins, 'ssssiss', $post['name'], $post['email'], $hash, $post['role'], $is_verified, $seller_request, $seller_note);
         if (mysqli_stmt_execute($ins)) {
-            $success = 'Account created! You can now log in.';
+            $success = 'Account created! Your profile is pending administrator approval.';
             $post    = [];
         } else {
             $errors[] = 'Registration failed. Please try again.';
@@ -83,6 +90,10 @@ require_once __DIR__ . '/../includes/header.php';
                 <option value="buyer"  <?php echo ($post['role'] ?? '') === 'buyer'  ? 'selected' : ''; ?>>Buy items</option>
                 <option value="seller" <?php echo ($post['role'] ?? '') === 'seller' ? 'selected' : ''; ?>>Sell items</option>
             </select>
+        </div>
+        <div class="form-group">
+            <label for="seller_reason">If selling, what do you plan to sell?</label>
+            <textarea id="seller_reason" name="seller_reason" class="form-control" placeholder="e.g. vintage clothing, sneakers, books"><?php echo h($post['seller_reason'] ?? ''); ?></textarea>
         </div>
         <button type="submit" class="btn btn-primary btn-full">Create Account</button>
         <p class="mt-1 text-muted" style="font-size:0.9rem; text-align:center;">

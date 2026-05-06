@@ -18,6 +18,10 @@ require_once __DIR__ . '/../includes/header.php';
 <?php else: ?>
     <div class="cart-layout">
 
+        <div class="cart-actions-bar">
+            <a href="<?php echo BASE_URL; ?>products/index.php" class="btn btn-secondary">Continue Shopping</a>
+        </div>
+
         <!-- Cart items -->
         <div class="table-wrap">
             <table class="data-table">
@@ -75,6 +79,7 @@ require_once __DIR__ . '/../includes/header.php';
             <?php else: ?>
                 <a href="<?php echo BASE_URL; ?>auth/login.php" class="btn btn-primary btn-full mt-1">Login to Checkout</a>
             <?php endif; ?>
+            <a href="<?php echo BASE_URL; ?>products/index.php" class="btn btn-secondary btn-full mt-1">Continue Shopping</a>
         </div>
 
     </div>

@@ -28,8 +28,14 @@ require_once __DIR__ . '/functions.php';
                         <li><a href="<?php echo BASE_URL; ?>orders/manage.php">Manage Orders</a></li>
                     <?php endif; ?>
 
+                    <?php if (isBuyer() || isSellerRequestPending()): ?>
+                        <li><a href="<?php echo BASE_URL; ?>auth/request_seller.php">Become Seller</a></li>
+                    <?php endif; ?>
+
                     <?php if (isAdmin()): ?>
                         <li><a href="<?php echo BASE_URL; ?>admin/dashboard.php">Admin</a></li>
+                        <li><a href="<?php echo BASE_URL; ?>admin/verify_users.php">Verify Users</a></li>
+                        <li><a href="<?php echo BASE_URL; ?>admin/users.php">Users</a></li>
                     <?php endif; ?>
 
                     <li><a href="<?php echo BASE_URL; ?>orders/track.php">My Orders</a></li>
@@ -42,7 +48,7 @@ require_once __DIR__ . '/functions.php';
                             <?php endif; ?>
                         </a>
                     </li>
-                    <li class="nav-user">Hi, <?php echo h($_SESSION['user_name'] ?? 'User'); ?></li>
+                    <li class="nav-user">Hi, <?php echo h($_SESSION['user_name'] ?? 'User'); ?> <?php echo verificationBadge($_SESSION['is_verified'] ?? 0); ?></li>
                     <li><a href="<?php echo BASE_URL; ?>auth/logout.php" class="btn btn-outline-sm">Logout</a></li>
 
                 <?php else: ?>

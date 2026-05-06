@@ -18,6 +18,8 @@ $total_users    = getStat($conn, "SELECT COUNT(*) FROM users");
 $total_products = getStat($conn, "SELECT COUNT(*) FROM products");
 $total_orders   = getStat($conn, "SELECT COUNT(*) FROM orders");
 $total_messages = getStat($conn, "SELECT COUNT(*) FROM messages");
+$pending_users  = getStat($conn, "SELECT COUNT(*) FROM users WHERE is_verified = 0");
+$pending_sellers = getStat($conn, "SELECT COUNT(*) FROM users WHERE role = 'seller' AND seller_request = 'pending'");
 $total_revenue_row = mysqli_query($conn, "SELECT COALESCE(SUM(total),0) FROM orders WHERE status='Delivered'");
 $total_revenue  = mysqli_fetch_row($total_revenue_row)[0] ?? 0;
 
@@ -47,7 +49,15 @@ require_once __DIR__ . '/../includes/header.php';
     <div class="stat-card"><div class="stat-number"><?php echo number_format($total_products); ?></div><div class="stat-label">Listings</div></div>
     <div class="stat-card"><div class="stat-number"><?php echo number_format($total_orders); ?></div><div class="stat-label">Orders</div></div>
     <div class="stat-card"><div class="stat-number"><?php echo number_format($total_messages); ?></div><div class="stat-label">Messages</div></div>
+    <div class="stat-card"><div class="stat-number"><?php echo number_format($pending_users); ?></div><div class="stat-label">Pending Verifications</div></div>
+    <div class="stat-card"><div class="stat-number"><?php echo number_format($pending_sellers); ?></div><div class="stat-label">Seller Requests</div></div>
     <div class="stat-card" style="grid-column: span 2;"><div class="stat-number">R <?php echo number_format($total_revenue, 2); ?></div><div class="stat-label">Revenue (Delivered)</div></div>
+</div>
+
+<div class="admin-quick-links">
+    <a href="<?php echo BASE_URL; ?>admin/verify_users.php" class="btn btn-secondary">Verify Users</a>
+    <a href="<?php echo BASE_URL; ?>admin/users.php" class="btn btn-secondary">Manage Users</a>
+    <a href="<?php echo BASE_URL; ?>auth/request_seller.php" class="btn btn-secondary">Seller Requests</a>
 </div>
 
 <h2 class="section-title">Recent Users</h2>

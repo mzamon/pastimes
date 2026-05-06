@@ -64,9 +64,24 @@ function isBuyer() {
     return isset($_SESSION['role']) && $_SESSION['role'] === 'buyer';
 }
 
+function isVerified() {
+    return isset($_SESSION['is_verified']) && (int)$_SESSION['is_verified'] === 1;
+}
+
+function isSellerRequestPending() {
+    return isset($_SESSION['seller_request']) && $_SESSION['seller_request'] === 'pending';
+}
+
 function requireLogin() {
     if (!isLoggedIn()) {
         redirect(BASE_URL . 'auth/login.php');
+    }
+}
+
+function requireVerified() {
+    requireLogin();
+    if (!isVerified()) {
+        redirect(BASE_URL . 'auth/login.php?pending=1');
     }
 }
 
@@ -75,6 +90,7 @@ function requireSeller() {
     if (!isSeller()) {
         redirect(BASE_URL . 'index.php');
     }
+    requireVerified();
 }
 
 function requireAdmin() {
@@ -117,5 +133,22 @@ function statusBadge($status) {
     ];
     $class = $map[$status] ?? 'status-pending';
     return '<span class="status-badge ' . $class . '">' . h($status) . '</span>';
+}
+
+function verificationBadge($isVerified) {
+    $class = $isVerified ? 'status-delivered' : 'status-pending';
+    $label = $isVerified ? 'Verified' : 'Pending approval';
+    return '<span class="status-badge ' . $class . '">' . h($label) . '</span>';
+}
+
+function sellerRequestBadge($status) {
+    $map = [
+        'none'     => 'status-pending',
+        'pending'  => 'status-packed',
+        'approved' => 'status-delivered',
+        'rejected' => 'status-transit',
+    ];
+    $class = $map[$status] ?? 'status-pending';
+    return '<span class="status-badge ' . $class . '">' . h(ucfirst($status)) . '</span>';
 }
 ?>

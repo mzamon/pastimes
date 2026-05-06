@@ -62,6 +62,12 @@ require_once __DIR__ . '/../includes/header.php';
             <?php endif; ?>
         </div>
 
+        <?php if (!$isOwner && $product['status'] !== 'sold'): ?>
+            <p style="margin-top:0.75rem;">
+                <a href="<?php echo BASE_URL; ?>products/index.php">Continue shopping</a>
+            </p>
+        <?php endif; ?>
+
         <p class="text-muted" style="margin-top:1rem;">
             Sold by <strong><?php echo h($product['seller_name']); ?></strong>
         </p>
