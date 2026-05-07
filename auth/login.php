@@ -14,17 +14,15 @@ if (isset($_GET['pending'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = sanitize($_POST['username'] ?? '');
     $email    = sanitize($_POST['email']    ?? '');
     $password = $_POST['password'] ?? '';
-    $post['username'] = $username;
     $post['email'] = $email;
 
-    if (empty($username) || empty($email) || empty($password)) {
-        $errors[] = 'Please enter your username, email and password.';
+    if (empty($email) || empty($password)) {
+        $errors[] = 'Please enter your email and password.';
     } else {
-        $stmt = mysqli_prepare($conn, "SELECT id, name, email, password_hash, role, is_verified, seller_request FROM tblUser WHERE name = ? AND email = ? LIMIT 1");
-        mysqli_stmt_bind_param($stmt, 'ss', $username, $email);
+        $stmt = mysqli_prepare($conn, "SELECT id, name, email, password_hash, role, is_verified, seller_request FROM tblUser WHERE email = ? LIMIT 1");
+        mysqli_stmt_bind_param($stmt, 's', $email);
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $user   = mysqli_fetch_assoc($result);
@@ -96,10 +94,6 @@ require_once __DIR__ . '/../includes/header.php';
     <?php endif; ?>
 
     <form method="POST" action="">
-        <div class="form-group">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" class="form-control" required autofocus value="<?php echo h($post['username'] ?? ''); ?>">
-        </div>
         <div class="form-group">
             <label for="email">Email Address</label>
             <input type="email" id="email" name="email" class="form-control" required autofocus value="<?php echo h($post['email'] ?? ''); ?>">
